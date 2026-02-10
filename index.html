@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>A little note</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(-45deg, #ffeaf2, #fdfbff, #fff0f5);
+  background-size: 400% 400%;
+  animation: gradientMove 14s ease infinite, cameraZoom 20s ease-in-out infinite;
+}
+
+/* slow cinematic zoom */
+@keyframes cameraZoom {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* dreamy vignette edges */
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.08));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* light rays glow */
+.glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(231,84,128,0.2), transparent 70%);
+  filter: blur(45px);
+  animation: pulse 6s ease-in-out infinite;
+  z-index: 1;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* luxury floating card */
+.card {
+  position: relative;
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.92);
+  padding: 60px 70px;
+  border-radius: 28px;
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.08),
+    0 0 30px rgba(231,84,128,0.18);
+  text-align: center;
+  animation: floatCard 6s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes floatCard {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* typing text */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 54px;
+  color: #e75480;
+  margin: 0 0 30px 0;
+  border-right: 3px solid #e75480;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* blinking cursor */
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+
+button {
+  padding: 14px 36px;
+  border: none;
+  border-radius: 30px;
+  background: #e75480;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 8px 20px rgba(231,84,128,0.25);
+}
+
+button:hover {
+  transform: scale(1.08);
+}
+
+/* falling lilies */
+.lily {
+  position: absolute;
+  top: -10px;
+  font-size: 22px;
+  animation: fall linear forwards;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="vignette"></div>
+<div class="glow"></div>
+
+<div class="card" id="card">
+  <h1 id="typing"></h1>
+  <button onclick="goNext()">Open</button>
+</div>
+
+<script>
+/* typing animation */
+const text = "A little question for you..";
+const typing = document.getElementById("typing");
+let i = 0;
+
+function typeWriter() {
+  if (i < text.length) {
+    typing.textContent += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, 70);
+  }
+}
+
+typeWriter();
+
+/* transition */
+function goNext() {
+  const card = document.getElementById("card");
+  card.style.opacity = "0";
+  card.style.transition = "opacity 0.7s ease";
+  setTimeout(() => {
+    window.location.href = "valentine.html";
+  }, 700);
+}
+
+/* falling lilies */
+setInterval(() => {
+  const lily = document.createElement("div");
+  lily.className = "lily";
+  lily.innerHTML = "🌸";
+  lily.style.left = Math.random() * 100 + "vw";
+  lily.style.animationDuration = (7 + Math.random() * 5) + "s";
+  document.body.appendChild(lily);
+
+  setTimeout(() => lily.remove(), 12000);
+}, 600);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(-45deg, #fff0f5, #fdfbff, #ffeaf2);
+  background-size: 400% 400%;
+  animation: gradientMove 14s ease infinite, cameraZoom 20s ease-in-out infinite;
+}
+
+@keyframes cameraZoom {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.08));
+  pointer-events: none;
+}
+
+.glow {
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(231,84,128,0.2), transparent 70%);
+  filter: blur(45px);
+  animation: pulse 6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.flip-container {
+  perspective: 1200px;
+  z-index: 2;
+}
+
+.flip-card {
+  width: 380px;
+  min-height: 240px;
+  transform-style: preserve-3d;
+  animation: flipOpen 1.6s ease forwards;
+}
+
+@keyframes flipOpen {
+  from { transform: rotateY(90deg); opacity: 0; }
+  to { transform: rotateY(0); opacity: 1; }
+}
+
+.card {
+  width: 100%;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(18px);
+  border-radius: 24px;
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.08),
+    0 0 30px rgba(231,84,128,0.18);
+  padding: 40px;
+  text-align: center;
+  position: relative;
+}
+
+h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  color: #e75480;
+  margin-bottom: 28px;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  position: relative;
+}
+
+button {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 30px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+#yesBtn {
+  background: #e75480;
+  color: white;
+  z-index: 1;
+}
+
+#yesBtn:hover {
+  transform: scale(1.05);
+}
+
+/* FIX: No button starts in normal flow */
+#noBtn {
+  background: #f2f2f2;
+  position: relative;
+}
+
+.lily {
+  position: absolute;
+  top: -10px;
+  font-size: 22px;
+  animation: fall linear forwards;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="vignette"></div>
+<div class="glow"></div>
+
+<div class="flip-container">
+  <div class="flip-card" id="card">
+    <div class="card" id="cardBox">
+
+      <h2>Babyyy will you be my Valentine?</h2>
+
+      <div class="buttons">
+        <button id="yesBtn" onclick="goLove()">Yes</button>
+        <button id="noBtn">No</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const cardBox = document.getElementById("cardBox");
+
+function moveButton() {
+  const rect = cardBox.getBoundingClientRect();
+
+  // switch to absolute only when moving
+  noBtn.style.position = "absolute";
+
+  const x = Math.random() * (rect.width - 100);
+  const y = Math.random() * (rect.height - 60);
+
+  noBtn.style.left = x + "px";
+  noBtn.style.top = y + "px";
+}
+
+noBtn.addEventListener("mouseover", moveButton);
+
+function goLove() {
+  const card = document.getElementById("card");
+  card.style.opacity = "0";
+  card.style.transition = "opacity 0.7s ease";
+  setTimeout(() => {
+    window.location.href = "love.html";
+  }, 700);
+}
+
+setInterval(() => {
+  const lily = document.createElement("div");
+  lily.className = "lily";
+  lily.innerHTML = "🌸";
+  lily.style.left = Math.random() * 100 + "vw";
+  lily.style.animationDuration = (7 + Math.random() * 5) + "s";
+  document.body.appendChild(lily);
+
+  setTimeout(() => lily.remove(), 12000);
+}, 600);
+</script>
+
+</body>
+</html>
