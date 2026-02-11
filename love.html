@@ -19,7 +19,12 @@ body {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(-45deg, #ffeaf2, #fdfbff, #fff0f5);
   background-size: 400% 400%;
-  animation: gradientMove 14s ease infinite;
+  animation: gradientMove 14s ease infinite, cameraZoom 20s ease-in-out infinite;
+}
+
+@keyframes cameraZoom {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
 }
 
 @keyframes gradientMove {
@@ -28,26 +33,26 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* Soft glow behind envelope */
-.glow {
+/* glowing heart background */
+.heartGlow {
   position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(231,84,128,0.18), transparent 70%);
-  filter: blur(40px);
-  animation: pulse 6s ease-in-out infinite;
+  font-size: 220px;
+  color: rgba(231,84,128,0.12);
+  filter: blur(8px);
+  animation: heartPulse 4s ease-in-out infinite;
+  z-index: 0;
 }
 
-@keyframes pulse {
-  0%,100% { opacity: 0.6; }
-  50% { opacity: 1; }
+@keyframes heartPulse {
+  0%,100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
 }
 
-/* Envelope floating animation */
+/* envelope floating */
 .envelope {
   position: relative;
-  width: 380px;
-  height: 260px;
+  width: 400px;
+  height: 280px;
   perspective: 1000px;
   animation: floatEnvelope 6s ease-in-out infinite;
   z-index: 2;
@@ -55,7 +60,7 @@ body {
 
 @keyframes floatEnvelope {
   0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  50% { transform: translateY(-14px); }
 }
 
 .base {
@@ -63,7 +68,7 @@ body {
   width: 100%;
   height: 100%;
   border-radius: 26px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.92);
   backdrop-filter: blur(18px);
   box-shadow:
     0 25px 60px rgba(0,0,0,0.08),
@@ -85,7 +90,7 @@ body {
   to { transform: rotateX(-160deg); }
 }
 
-/* Letter */
+/* letter */
 .letter {
   position: absolute;
   top: 26px;
@@ -112,6 +117,17 @@ body {
   }
 }
 
+/* text fade animation */
+.title, .message {
+  animation: textFade 2s ease forwards;
+  animation-delay: 2s;
+  opacity: 0;
+}
+
+@keyframes textFade {
+  to { opacity: 1; }
+}
+
 .title {
   font-family: 'Playfair Display', serif;
   font-size: 50px;
@@ -121,26 +137,29 @@ body {
 
 .message {
   font-family: 'Playfair Display', serif;
-  font-size: 28px;
+  font-size: 26px;
   color: #e75480;
   margin: 0;
+  line-height: 1.4;
 }
 
-/* Stargazer lily falling flowers */
+/* swirling lilies */
 .lily {
   position: absolute;
-  top: -10px;
   font-size: 22px;
-  animation: fall linear forwards;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.9;
+  animation: swirl 10s linear forwards;
 }
 
-@keyframes fall {
-  to {
-    transform: translateY(110vh) rotate(360deg);
-    opacity: 0.8;
+@keyframes swirl {
+  0% {
+    transform: translateY(110vh) translateX(0) rotate(0deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(80px) rotate(360deg);
+    opacity: 0;
   }
 }
 </style>
@@ -148,30 +167,33 @@ body {
 
 <body>
 
-<div class="glow"></div>
+<div class="heartGlow">💗</div>
 
 <div class="envelope">
   <div class="base"></div>
   <div class="flap"></div>
 
   <div class="letter">
-    <h1 class="title">Yayyyy</h1>
-    <p class="message">I love you babyyyy 💗</p>
+    <h1 class="title">Yayyy</h1>
+    <p class="message">
+      Happy Valentine's babyyy<br>
+      I love you so muchh 💗
+    </p>
   </div>
 </div>
 
 <script>
-/* Falling stargazer lilies */
+/* swirling stargazer lilies */
 setInterval(() => {
   const lily = document.createElement("div");
   lily.className = "lily";
-  lily.innerHTML = "🌸"; // lily-style flower
+  lily.innerHTML = "🌸";
   lily.style.left = Math.random() * 100 + "vw";
-  lily.style.animationDuration = (7 + Math.random() * 5) + "s";
+  lily.style.animationDuration = (8 + Math.random() * 4) + "s";
   document.body.appendChild(lily);
 
   setTimeout(() => lily.remove(), 12000);
-}, 600);
+}, 500);
 </script>
 
 </body>
